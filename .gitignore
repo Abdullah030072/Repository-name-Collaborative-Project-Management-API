@@ -46,3 +46,14 @@ venv/
 downloads/
 .env
 emails/
+
+
+venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+media/
+.vscode/
+.DS_Store
+Thumbs.db

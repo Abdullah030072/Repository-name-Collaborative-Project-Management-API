@@ -14,41 +14,41 @@ urlpatterns = [
 
     # Ticket 1 - User Registration
     path(
-        'register/',
+        "register/",
         UserRegistrationAPIView.as_view(),
-        name='register'
+        name="register"
     ),
 
     # User APIs
     path(
-        'users/',
+        "users/",
         UserListAPIView.as_view(),
-        name='user-list'
+        name="user-list"
     ),
 
     # Profile APIs
     path(
-        'profiles/',
+        "profiles/",
         ProfileListAPIView.as_view(),
-        name='profile-list'
+        name="profile-list"
     ),
 
     path(
-        'profiles/<int:pk>/',
+        "profiles/<int:pk>/",
         ProfileDetailAPIView.as_view(),
-        name='profile-detail'
+        name="profile-detail"
     ),
 
     # Project APIs
     path(
-        'projects/',
+        "projects/",
         ProjectListCreateAPIView.as_view(),
-        name='project-list-create'
+        name="project-list-create"
     ),
 
     path(
-        'projects/<int:pk>/',
+        "projects/<int:pk>/",
         ProjectDetailAPIView.as_view(),
-        name='project-detail'
+        name="project-detail"
     ),
 ]

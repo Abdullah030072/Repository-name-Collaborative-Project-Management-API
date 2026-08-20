@@ -5,7 +5,7 @@ The `urlpatterns` list routes URLs to views.
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 
 from core.views import (
     UserRegistrationAPIView,
@@ -18,6 +18,7 @@ from core.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('core.urls')),
 
     # Ticket 1 - User Registration
     path(

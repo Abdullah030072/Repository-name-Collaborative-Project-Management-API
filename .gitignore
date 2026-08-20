@@ -57,3 +57,6 @@ media/
 .vscode/
 .DS_Store
 Thumbs.db
+
+media/
+profile_pictures/

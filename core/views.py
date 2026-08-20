@@ -20,8 +20,8 @@ class UserListAPIView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
 
-# Profile List API
-class ProfileListAPIView(generics.ListAPIView):
+# Profile List + Create API
+class ProfileListAPIView(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [AllowAny]
@@ -40,7 +40,7 @@ class ProjectListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
 
     def get_permissions(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             return [IsManager()]
 
         return [IsAuthenticated()]
@@ -55,7 +55,7 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProjectSerializer
 
     def get_permissions(self):
-        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
+        if self.request.method in ["PUT", "PATCH", "DELETE"]:
             return [IsManager()]
 
         return [IsAuthenticated()]

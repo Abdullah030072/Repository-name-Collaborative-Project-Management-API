@@ -1,33 +1,26 @@
-"""
-URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views.
-"""
-
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from core.views import (
     UserRegistrationAPIView,
     UserListAPIView,
     ProfileListAPIView,
+    ProfileDetailAPIView,
     ProjectListCreateAPIView,
     ProjectDetailAPIView,
 )
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('core.urls')),
 
-    # Ticket 1 - User Registration
     path(
         'api/register/',
         UserRegistrationAPIView.as_view(),
         name='register'
     ),
 
-    # User APIs
     path(
         'api/users/',
         UserListAPIView.as_view(),
@@ -40,7 +33,12 @@ urlpatterns = [
         name='profile-list'
     ),
 
-    # Project APIs
+    path(
+        'api/profiles/<int:pk>/',
+        ProfileDetailAPIView.as_view(),
+        name='profile-detail'
+    ),
+
     path(
         'api/projects/',
         ProjectListCreateAPIView.as_view(),
@@ -53,3 +51,9 @@ urlpatterns = [
         name='project-detail'
     ),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )

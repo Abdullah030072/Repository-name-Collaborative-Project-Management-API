@@ -27,6 +27,13 @@ class ProfileListAPIView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
 
+# Profile Detail + Update API
+class ProfileDetailAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [AllowAny]
+
+
 # Project List + Create API
 class ProjectListCreateAPIView(generics.ListCreateAPIView):
     queryset = Project.objects.all()

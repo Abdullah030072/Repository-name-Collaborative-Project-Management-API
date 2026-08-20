@@ -1,22 +1,54 @@
 """
 URL configuration for config project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+The `urlpatterns` list routes URLs to views.
 """
+
 from django.contrib import admin
 from django.urls import path
 
+from core.views import (
+    UserRegistrationAPIView,
+    UserListAPIView,
+    ProfileListAPIView,
+    ProjectListCreateAPIView,
+    ProjectDetailAPIView,
+)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Ticket 1 - User Registration
+    path(
+        'api/register/',
+        UserRegistrationAPIView.as_view(),
+        name='register'
+    ),
+
+    # User APIs
+    path(
+        'api/users/',
+        UserListAPIView.as_view(),
+        name='user-list'
+    ),
+
+    path(
+        'api/profiles/',
+        ProfileListAPIView.as_view(),
+        name='profile-list'
+    ),
+
+    # Project APIs
+    path(
+        'api/projects/',
+        ProjectListCreateAPIView.as_view(),
+        name='project-list-create'
+    ),
+
+    path(
+        'api/projects/<int:pk>/',
+        ProjectDetailAPIView.as_view(),
+        name='project-detail'
+    ),
 ]

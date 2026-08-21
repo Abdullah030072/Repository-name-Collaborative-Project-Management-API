@@ -3,7 +3,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-
 from .models import User, Profile, Project, Task
 from .serializers import (
     UserSerializer,
@@ -81,18 +80,15 @@ class ProjectListCreateAPIView(generics.ListCreateAPIView):
         if self.request.method == "POST":
             return [IsManager()]
 
-        if self.request.method == "GET":
-            return [IsAuthenticated()]
-
         return [IsAuthenticated()]
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+
 # Ticket 6 - Project Detail API
 # Ticket 7 - Update Project API
 # Ticket 8 - Delete Project API
-#these 3 tickets are combined into one view since they all deal with a single project instance
 class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -102,12 +98,19 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             return [IsManager()]
 
         return [IsAuthenticated()]
-    
+
+
 # Ticket 9 - Create Task API
-class TaskCreateAPIView(generics.CreateAPIView):
+# Ticket 10 - List Tasks API
+class TaskListCreateAPIView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [IsManager]
-    
-    
-    
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [IsManager()]
+
+        return [IsAuthenticated()]
+
+    def perform_create(self, serializer):
+        serializer.save()

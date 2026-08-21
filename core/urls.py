@@ -8,7 +8,7 @@ from .views import (
     ProjectListCreateAPIView,
     ProjectDetailAPIView,
     LogoutAPIView,
-    TaskCreateAPIView,
+    TaskListCreateAPIView,
 )
 
 
@@ -59,11 +59,11 @@ urlpatterns = [
         ProjectDetailAPIView.as_view(),
         name="project-detail"
     ),
-    
-        # Ticket 9 - Create Task API
+
+    # Ticket 9 + Ticket 10 - Task APIs
     path(
         "tasks/",
-        TaskCreateAPIView.as_view(),
-        name="task-create"
+        TaskListCreateAPIView.as_view(),
+        name="task-list-create"
     ),
 ]

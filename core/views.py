@@ -65,7 +65,8 @@ class ProfileDetailAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [AllowAny]
 
 
-# Ticket 4 - Create Project / List Projects API
+# Ticket 4 - Create Project API
+# Ticket 5 - List Projects API
 class ProjectListCreateAPIView(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -73,6 +74,9 @@ class ProjectListCreateAPIView(generics.ListCreateAPIView):
     def get_permissions(self):
         if self.request.method == "POST":
             return [IsManager()]
+
+        if self.request.method == "GET":
+            return [IsAuthenticated()]
 
         return [IsAuthenticated()]
 

@@ -116,13 +116,18 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
         serializer.save()
         
 # Ticket 11 - Task Detail API
+# Ticket 12 - Update Task API
 class TaskDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
     def get_permissions(self):
-        if self.request.method in ["PUT", "PATCH", "DELETE"]:
+        if self.request.method in ["PUT", "PATCH"]:
             return [IsManager()]
 
-        return [IsAuthenticated()]       
-        
+        if self.request.method == "DELETE":
+            return [IsManager()]
+
+        return [IsAuthenticated()]
+    
+    

@@ -3,6 +3,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 from core.views import (
     UserRegistrationAPIView,
     UserListAPIView,
@@ -14,7 +16,7 @@ from core.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    #Ticket 1 - User Registration and Authentication APIs
     path(
         'api/register/',
         UserRegistrationAPIView.as_view(),
@@ -50,6 +52,20 @@ urlpatterns = [
         ProjectDetailAPIView.as_view(),
         name='project-detail'
     ),
+    
+    # JWT Authentication APIs
+path(
+    'api/login/',
+    TokenObtainPairView.as_view(),
+    name='token_obtain_pair'
+),
+
+path(
+    'api/token/refresh/',
+    TokenRefreshView.as_view(),
+    name='token_refresh'
+),
+    
 ]
 
 if settings.DEBUG:

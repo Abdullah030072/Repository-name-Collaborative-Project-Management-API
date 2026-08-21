@@ -8,6 +8,7 @@ from .views import (
     ProjectListCreateAPIView,
     ProjectDetailAPIView,
     LogoutAPIView,
+    TaskCreateAPIView,
 )
 
 
@@ -57,5 +58,12 @@ urlpatterns = [
         "projects/<int:pk>/",
         ProjectDetailAPIView.as_view(),
         name="project-detail"
+    ),
+    
+        # Ticket 9 - Create Task API
+    path(
+        "tasks/",
+        TaskCreateAPIView.as_view(),
+        name="task-create"
     ),
 ]

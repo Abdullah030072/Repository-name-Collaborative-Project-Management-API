@@ -3,8 +3,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, Profile, Project
-from .serializers import UserSerializer, ProfileSerializer, ProjectSerializer
+
+from .models import User, Profile, Project, Task
+from .serializers import (
+    UserSerializer,
+    ProfileSerializer,
+    ProjectSerializer,
+    TaskSerializer,
+)
 from .permissions import IsManager
 
 
@@ -96,6 +102,12 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             return [IsManager()]
 
         return [IsAuthenticated()]
+    
+# Ticket 9 - Create Task API
+class TaskCreateAPIView(generics.CreateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsManager]
     
     
     

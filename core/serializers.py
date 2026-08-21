@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import User, Profile, Project
+from .models import User, Profile, Project, Task
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -51,6 +51,27 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'id',
             'created_by',
+            'created_at',
+            'updated_at',
+        ]
+        
+class TaskSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'title',
+            'description',
+            'status',
+            'project',
+            'assignee',
+            'created_at',
+            'updated_at',
+        ]
+
+        read_only_fields = [
+            'id',
             'created_at',
             'updated_at',
         ]

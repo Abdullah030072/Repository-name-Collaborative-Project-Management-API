@@ -16,6 +16,7 @@ from core.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("api/", include("core.urls")),
     #Ticket 1 - User Registration and Authentication APIs
     path(
         'api/register/',

@@ -9,6 +9,7 @@ from .views import (
     ProjectDetailAPIView,
     LogoutAPIView,
     TaskListCreateAPIView,
+    TaskDetailAPIView,
 )
 
 
@@ -66,4 +67,13 @@ urlpatterns = [
         TaskListCreateAPIView.as_view(),
         name="task-list-create"
     ),
+    
+        # Ticket 11 - Task Detail API
+    path(
+        "tasks/<int:pk>/",
+        TaskDetailAPIView.as_view(),
+        name="task-detail"
+    ),
 ]
+
+

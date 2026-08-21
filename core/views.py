@@ -86,7 +86,7 @@ class ProjectListCreateAPIView(generics.ListCreateAPIView):
 # Ticket 6 - Project Detail API
 # Ticket 7 - Update Project API
 # Ticket 8 - Delete Project API
-# PUT/PATCH/DELETE functionality will be handled in later tickets.
+#these 3 tickets are combined into one view since they all deal with a single project instance
 class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer

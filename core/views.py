@@ -1,6 +1,10 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from .models import User, Profile, Project
 from .serializers import UserSerializer, ProfileSerializer, ProjectSerializer
 from .permissions import IsManager
@@ -12,6 +16,34 @@ class UserRegistrationAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
+# Ticket 3 - User Logout API
+
+class LogoutAPIView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        refresh_token = request.data.get("refresh")
+
+        if not refresh_token:
+            return Response(
+                {"detail": "Refresh token is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(
+                {"detail": "Successfully logged out."},
+                status=status.HTTP_205_RESET_CONTENT
+            )
+
+        except Exception:
+            return Response(
+                {"detail": "Invalid or expired refresh token."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 # User List API
 class UserListAPIView(generics.ListAPIView):

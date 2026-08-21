@@ -7,16 +7,23 @@ from .views import (
     ProfileDetailAPIView,
     ProjectListCreateAPIView,
     ProjectDetailAPIView,
+    LogoutAPIView,
 )
 
 
 urlpatterns = [
-
     # Ticket 1 - User Registration
     path(
         "register/",
         UserRegistrationAPIView.as_view(),
         name="register"
+    ),
+
+    # Ticket 3 - User Logout
+    path(
+        "logout/",
+        LogoutAPIView.as_view(),
+        name="logout"
     ),
 
     # User APIs

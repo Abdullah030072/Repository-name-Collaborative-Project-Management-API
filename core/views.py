@@ -83,8 +83,8 @@ class ProjectListCreateAPIView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-
-# Project Detail + Update + Delete API
+# Ticket 6 - Project Detail API
+# PUT/PATCH/DELETE functionality will be handled in later tickets.
 class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -94,3 +94,6 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             return [IsManager()]
 
         return [IsAuthenticated()]
+    
+    
+    

@@ -1,8 +1,6 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User, Profile, Project
@@ -16,8 +14,8 @@ class UserRegistrationAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-# Ticket 3 - User Logout API
 
+# Ticket 3 - User Logout API
 class LogoutAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -45,6 +43,7 @@ class LogoutAPIView(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+
 # User List API
 class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
@@ -66,7 +65,7 @@ class ProfileDetailAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [AllowAny]
 
 
-# Project List + Create API
+# Ticket 4 - Create Project / List Projects API
 class ProjectListCreateAPIView(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -81,7 +80,7 @@ class ProjectListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(created_by=self.request.user)
 
 
-# Project Detail API
+# Project Detail + Update + Delete API
 class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer

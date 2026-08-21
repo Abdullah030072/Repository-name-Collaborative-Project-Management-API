@@ -134,3 +134,42 @@ class TaskDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
         return [IsAuthenticated()]
     
+# Ticket 14 - Assign Task API
+class TaskAssignAPIView(generics.GenericAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsManager]
+
+    def post(self, request, pk):
+        task = self.get_object()
+
+        assignee_id = request.data.get("assignee")
+
+        if not assignee_id:
+            return Response(
+                {"detail": "Assignee is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = User.objects.get(id=assignee_id)
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "User not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if not task.project.team_members.filter(id=user.id).exists():
+            return Response(
+                {"detail": "User is not a member of this project."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        task.assignee = user
+        task.save()
+
+        return Response(
+            TaskSerializer(task).data,
+            status=status.HTTP_200_OK
+        )
+    

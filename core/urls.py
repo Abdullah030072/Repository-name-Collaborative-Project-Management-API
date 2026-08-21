@@ -10,6 +10,7 @@ from .views import (
     LogoutAPIView,
     TaskListCreateAPIView,
     TaskDetailAPIView,
+    TaskAssignAPIView,
 )
 
 
@@ -74,6 +75,13 @@ urlpatterns = [
         TaskDetailAPIView.as_view(),
         name="task-detail"
     ),
+    
+    # Ticket 14 - Assign Task API
+path(
+    "tasks/<int:pk>/assign/",
+    TaskAssignAPIView.as_view(),
+    name="task-assign"
+),
 ]
 
 

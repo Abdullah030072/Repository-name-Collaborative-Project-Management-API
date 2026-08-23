@@ -3,12 +3,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, Profile, Project, Task
+from .models import User, Profile, Project, Task, Document
 from .serializers import (
     UserSerializer,
     ProfileSerializer,
     ProjectSerializer,
     TaskSerializer,
+    DocumentSerializer, 
 )
 from .permissions import IsManager
 
@@ -172,4 +173,15 @@ class TaskAssignAPIView(generics.GenericAPIView):
             TaskSerializer(task).data,
             status=status.HTTP_200_OK
         )
+
+
+# Ticket 15 - Upload Document API
+class DocumentUploadAPIView(generics.CreateAPIView):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save()      
+        
     

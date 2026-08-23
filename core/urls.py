@@ -11,6 +11,7 @@ from .views import (
     TaskListCreateAPIView,
     TaskDetailAPIView,
     TaskAssignAPIView,
+    DocumentUploadAPIView, 
 )
 
 
@@ -81,6 +82,13 @@ path(
     "tasks/<int:pk>/assign/",
     TaskAssignAPIView.as_view(),
     name="task-assign"
+),
+
+# Ticket 15 - Upload Document API
+path(
+    "documents/",
+    DocumentUploadAPIView.as_view(),
+    name="document-upload"
 ),
 ]
 

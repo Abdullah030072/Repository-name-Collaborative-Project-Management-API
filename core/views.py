@@ -3,13 +3,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, Profile, Project, Task, Document
+from .models import User, Profile, Project, Task, Document, Comment
 from .serializers import (
     UserSerializer,
     ProfileSerializer,
     ProjectSerializer,
     TaskSerializer,
     DocumentSerializer, 
+    CommentSerializer,
 )
 from .permissions import IsManager
 
@@ -198,4 +199,13 @@ class DocumentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = [IsAuthenticated]
+    
+# Ticket 20 - Create Comment API
+class CommentCreateAPIView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
     

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import User, Profile, Project, Task, Document
+from .models import User, Profile, Project, Task, Document, Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -95,4 +95,21 @@ class DocumentSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]     
+        
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = [
+            "id",
+            "text",
+            "author",
+            "created_at",
+            "task",
+            "project",
+        ]
+        read_only_fields = [
+            "id",
+            "author",
+            "created_at",
+        ]
         

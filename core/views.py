@@ -193,7 +193,8 @@ class DocumentListAPIView(generics.ListAPIView):
 
 # Ticket 17 - Document Detail API
 # Ticket 18 - Update Document API
-class DocumentDetailAPIView(generics.RetrieveUpdateAPIView):
+# Ticket 19 - Delete Document API
+class DocumentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = [IsAuthenticated]

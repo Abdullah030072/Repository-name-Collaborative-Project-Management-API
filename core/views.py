@@ -184,4 +184,11 @@ class DocumentUploadAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save()      
         
+        
+# Ticket 16 - List Documents API
+class DocumentListAPIView(generics.ListAPIView):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+    permission_classes = [IsAuthenticated]
+        
     

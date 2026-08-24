@@ -16,6 +16,7 @@ from .views import (
     DocumentDetailAPIView,
     CommentCreateAPIView,
     CommentListAPIView,
+    CommentDetailAPIView,
 )
 
 
@@ -120,6 +121,12 @@ path(
     "comments/list/",
     CommentListAPIView.as_view(),
     name="comment-list"
+),
+# Ticket 22 - Comment Detail API
+path(
+    "comments/<int:pk>/",
+    CommentDetailAPIView.as_view(),
+    name="comment-detail"
 ),
 ]
 

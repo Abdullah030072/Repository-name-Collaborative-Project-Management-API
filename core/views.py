@@ -215,3 +215,9 @@ class CommentListAPIView(generics.ListAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
+    
+# Ticket 22 - Comment Detail API
+class CommentDetailAPIView(generics.RetrieveAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]

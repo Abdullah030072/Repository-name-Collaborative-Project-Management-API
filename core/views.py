@@ -96,8 +96,11 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProjectSerializer
 
     def get_permissions(self):
-        if self.request.method in ["PUT", "PATCH", "DELETE"]:
+        if self.request.method in ["PUT", "PATCH"]:
             return [IsManager()]
+        if self.request.method == "DELETE":
+                    return [IsManager()]
+    
 
         return [IsAuthenticated()]
 

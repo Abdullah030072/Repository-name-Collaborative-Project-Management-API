@@ -3,15 +3,25 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, Profile, Project, Task, Document, Comment, TimelineEvent
+from .models import (
+    User,
+    Profile,
+    Project,
+    Task,
+    Document,
+    Comment,
+    TimelineEvent,
+    Notification,
+)
 from .serializers import (
     UserSerializer,
     ProfileSerializer,
     ProjectSerializer,
     TaskSerializer,
-    DocumentSerializer, 
+    DocumentSerializer,
     CommentSerializer,
-    TimelineEventSerializer
+    TimelineEventSerializer,
+    NotificationSerializer,
 )
 from .permissions import IsManager
 
@@ -236,5 +246,15 @@ class TimelineEventListAPIView(generics.ListAPIView):
     queryset = TimelineEvent.objects.all().order_by("-created_at")
     serializer_class = TimelineEventSerializer
     permission_classes = [IsAuthenticated]
+    
+# Ticket 26 - Notifications API
+class NotificationListAPIView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(
+            user=self.request.user
+        ).order_by("-created_at")
     
     

@@ -8,6 +8,7 @@ from .models import (
     Document,
     Comment,
     TimelineEvent,
+    Notification,
 )
 
 
@@ -139,5 +140,16 @@ class TimelineEventSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         
+        
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = [
+            "id",
+            "user",
+            "message",
+            "created_at",
+            "is_read",
+        ]
 
         

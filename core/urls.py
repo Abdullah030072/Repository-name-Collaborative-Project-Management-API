@@ -19,6 +19,7 @@ from .views import (
     CommentDetailAPIView,
     TimelineEventListAPIView,
     NotificationListAPIView,
+    NotificationMarkReadAPIView,
 )
 
 
@@ -143,6 +144,13 @@ path(
     "notifications/",
     NotificationListAPIView.as_view(),
     name="notification-list"
+),
+
+# Ticket 27 - Mark Notification as Read API
+path(
+    "notifications/<int:pk>/mark_read/",
+    NotificationMarkReadAPIView.as_view(),
+    name="notification-mark-read"
 ),
 ]
 

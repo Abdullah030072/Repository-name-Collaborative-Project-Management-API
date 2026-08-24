@@ -151,5 +151,12 @@ class NotificationSerializer(serializers.ModelSerializer):
             "created_at",
             "is_read",
         ]
+        read_only_fields = [
+            "id",
+            "user",
+            "message",
+            "created_at",
+            "is_read",
+        ]
 
         

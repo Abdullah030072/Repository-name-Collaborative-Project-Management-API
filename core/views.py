@@ -257,4 +257,23 @@ class NotificationListAPIView(generics.ListAPIView):
             user=self.request.user
         ).order_by("-created_at")
     
-    
+# Ticket 27 - Mark Notification as Read API
+class NotificationMarkReadAPIView(generics.UpdateAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(
+            user=self.request.user
+        )
+
+    def update(self, request, *args, **kwargs):
+        notification = self.get_object()
+
+        notification.is_read = True
+        notification.save(update_fields=["is_read"])
+
+        return Response(
+            NotificationSerializer(notification).data,
+            status=status.HTTP_200_OK
+        )

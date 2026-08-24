@@ -17,6 +17,7 @@ from .views import (
     CommentCreateAPIView,
     CommentListAPIView,
     CommentDetailAPIView,
+    TimelineEventListAPIView,
 )
 
 
@@ -127,6 +128,13 @@ path(
     "comments/<int:pk>/",
     CommentDetailAPIView.as_view(),
     name="comment-detail"
+),
+
+# Ticket 25 - List Timeline Events API
+path(
+    "timeline/",
+    TimelineEventListAPIView.as_view(),
+    name="timeline-list"
 ),
 ]
 

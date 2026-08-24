@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, Profile, Project, Task, Document, Comment
+from .models import User, Profile, Project, Task, Document, Comment, TimelineEvent
 from .serializers import (
     UserSerializer,
     ProfileSerializer,
@@ -11,6 +11,7 @@ from .serializers import (
     TaskSerializer,
     DocumentSerializer, 
     CommentSerializer,
+    TimelineEventSerializer
 )
 from .permissions import IsManager
 
@@ -229,3 +230,11 @@ class CommentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Comment.objects.filter(author=self.request.user)
+    
+# Ticket 25 - List Timeline Events API
+class TimelineEventListAPIView(generics.ListAPIView):
+    queryset = TimelineEvent.objects.all().order_by("-created_at")
+    serializer_class = TimelineEventSerializer
+    permission_classes = [IsAuthenticated]
+    
+    

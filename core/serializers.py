@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
-from .models import User, Profile, Project, Task, Document, Comment
+from .models import (
+    User,
+    Profile,
+    Project,
+    Task,
+    Document,
+    Comment,
+    TimelineEvent,
+)
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -112,4 +121,23 @@ class CommentSerializer(serializers.ModelSerializer):
             "author",
             "created_at",
         ]
+        
+class TimelineEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimelineEvent
+        fields = [
+            "id",
+            "project",
+            "event_type",
+            "description",
+            "created_by",
+            "created_at",
+        ]
+        read_only_fields = [
+            "id",
+            "created_by",
+            "created_at",
+        ]
+        
+
         

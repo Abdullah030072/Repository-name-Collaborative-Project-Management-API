@@ -221,7 +221,8 @@ class CommentListAPIView(generics.ListAPIView):
     
 # Ticket 22 - Comment Detail API
 # Ticket 23 - Update Comment API
-class CommentDetailAPIView(generics.RetrieveUpdateAPIView):
+# Ticket 24 - Delete Comment API
+class CommentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]

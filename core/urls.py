@@ -13,6 +13,7 @@ from .views import (
     TaskAssignAPIView,
     DocumentUploadAPIView,
     DocumentListAPIView,
+    DocumentDetailAPIView,
 )
 
 
@@ -97,6 +98,13 @@ path(
     "documents/list/",
     DocumentListAPIView.as_view(),
     name="document-list"
+),
+
+# Ticket 17 - Document Detail API
+path(
+    "documents/<int:pk>/",
+    DocumentDetailAPIView.as_view(),
+    name="document-detail"
 ),
 ]
 

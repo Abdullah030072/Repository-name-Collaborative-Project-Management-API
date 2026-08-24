@@ -190,5 +190,10 @@ class DocumentListAPIView(generics.ListAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = [IsAuthenticated]
-        
+
+# Ticket 17 - Document Detail API
+class DocumentDetailAPIView(generics.RetrieveAPIView):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+    permission_classes = [IsAuthenticated]
     

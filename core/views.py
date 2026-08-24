@@ -208,4 +208,10 @@ class CommentCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-    
+
+
+# Ticket 21 - List Comments API
+class CommentListAPIView(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]

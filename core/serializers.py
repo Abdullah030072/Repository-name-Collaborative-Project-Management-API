@@ -12,22 +12,28 @@ from .models import (
 )
 
 
+# ============================================================
+# User Serializer
+# ============================================================
 
 class UserSerializer(serializers.ModelSerializer):
+
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
         fields = [
-            'id',
-            'username',
-            'email',
-            'password',
+            "id",
+            "username",
+            "email",
+            "password",
         ]
-        read_only_fields = ['id']
+        read_only_fields = [
+            "id",
+        ]
 
     def create(self, validated_data):
-        password = validated_data.pop('password')
+        password = validated_data.pop("password")
 
         user = User.objects.create_user(
             password=password,
@@ -37,78 +43,117 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+# ============================================================
+# Profile Serializer
+# ============================================================
+
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+
+    # User is accepted as an ID when creating/updating a profile.
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        required=True
+    )
 
     class Meta:
         model = Profile
         fields = [
-            'id',
-            'user',
-            'profile_picture',
-            'role',
-            'contact_number',
+            "id",
+            "user",
+            "profile_picture",
+            "role",
+            "contact_number",
         ]
-        read_only_fields = ['id', 'user']
 
+        read_only_fields = [
+            "id",
+        ]
+
+
+# ============================================================
+# Project Serializer
+# ============================================================
 
 class ProjectSerializer(serializers.ModelSerializer):
+
     created_by = UserSerializer(read_only=True)
 
     class Meta:
         model = Project
-        fields = '__all__'
+
+        fields = "__all__"
+
         read_only_fields = [
-            'id',
-            'created_by',
-            'created_at',
-            'updated_at',
+            "id",
+            "created_by",
+            "created_at",
+            "updated_at",
         ]
-        
+
+
+# ============================================================
+# Task Serializer
+# ============================================================
+
 class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
+
         fields = [
-            'id',
-            'title',
-            'description',
-            'status',
-            'project',
-            'assignee',
-            'created_at',
-            'updated_at',
+            "id",
+            "title",
+            "description",
+            "status",
+            "project",
+            "assignee",
+            "created_at",
+            "updated_at",
         ]
 
         read_only_fields = [
-            'id',
-            'created_at',
-            'updated_at',
+            "id",
+            "created_at",
+            "updated_at",
         ]
+
+
+# ============================================================
+# Document Serializer
+# ============================================================
+
 class DocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Document
+
         fields = [
-            'id',
-            'name',
-            'description',
-            'file',
-            'version',
-            'project',
-            'created_at',
-            'updated_at',
+            "id",
+            "name",
+            "description",
+            "file",
+            "version",
+            "project",
+            "created_at",
+            "updated_at",
         ]
 
         read_only_fields = [
-            'id',
-            'created_at',
-            'updated_at',
-        ]     
-        
+            "id",
+            "created_at",
+            "updated_at",
+        ]
+
+
+# ============================================================
+# Comment Serializer
+# ============================================================
+
 class CommentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Comment
+
         fields = [
             "id",
             "text",
@@ -117,15 +162,23 @@ class CommentSerializer(serializers.ModelSerializer):
             "task",
             "project",
         ]
+
         read_only_fields = [
             "id",
             "author",
             "created_at",
         ]
-        
+
+
+# ============================================================
+# Timeline Event Serializer
+# ============================================================
+
 class TimelineEventSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = TimelineEvent
+
         fields = [
             "id",
             "project",
@@ -134,16 +187,23 @@ class TimelineEventSerializer(serializers.ModelSerializer):
             "created_by",
             "created_at",
         ]
+
         read_only_fields = [
             "id",
             "created_by",
             "created_at",
         ]
-        
-        
+
+
+# ============================================================
+# Notification Serializer
+# ============================================================
+
 class NotificationSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Notification
+
         fields = [
             "id",
             "user",
@@ -151,6 +211,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             "created_at",
             "is_read",
         ]
+
         read_only_fields = [
             "id",
             "user",
@@ -158,5 +219,3 @@ class NotificationSerializer(serializers.ModelSerializer):
             "created_at",
             "is_read",
         ]
-
-        

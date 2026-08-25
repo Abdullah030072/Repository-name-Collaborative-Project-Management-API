@@ -24,6 +24,7 @@ from .views import (
 
 
 urlpatterns = [
+
     # Ticket 1 - User Registration
     path(
         "register/",
@@ -77,81 +78,81 @@ urlpatterns = [
         TaskListCreateAPIView.as_view(),
         name="task-list-create"
     ),
-    
-        # Ticket 11 - Task Detail API
+
+    # Ticket 11 - Task Detail API
     path(
         "tasks/<int:pk>/",
         TaskDetailAPIView.as_view(),
         name="task-detail"
     ),
-    
+
     # Ticket 14 - Assign Task API
-path(
-    "tasks/<int:pk>/assign/",
-    TaskAssignAPIView.as_view(),
-    name="task-assign"
-),
+    path(
+        "tasks/<int:pk>/assign/",
+        TaskAssignAPIView.as_view(),
+        name="task-assign"
+    ),
 
-# Ticket 15 - Upload Document API
-path(
-    "documents/",
-    DocumentUploadAPIView.as_view(),
-    name="document-upload"
-),
+    # Ticket 15 - Upload Document API
+    path(
+        "documents/",
+        DocumentUploadAPIView.as_view(),
+        name="document-upload"
+    ),
 
-# Ticket 16 - List Documents API
-path(
-    "documents/list/",
-    DocumentListAPIView.as_view(),
-    name="document-list"
-),
+    # Ticket 16 - List Documents API
+    path(
+        "documents/list/",
+        DocumentListAPIView.as_view(),
+        name="document-list"
+    ),
 
-# Ticket 17 - Document Detail API
-path(
-    "documents/<int:pk>/",
-    DocumentDetailAPIView.as_view(),
-    name="document-detail"
-),
-# Ticket 20 - Create Comment API
-path(
-    "comments/",
-    CommentCreateAPIView.as_view(),
-    name="comment-create"
-),
+    # Ticket 17 - Document Detail API
+    path(
+        "documents/<int:pk>/",
+        DocumentDetailAPIView.as_view(),
+        name="document-detail"
+    ),
 
-# Ticket 21 - List Comments API
-path(
-    "comments/list/",
-    CommentListAPIView.as_view(),
-    name="comment-list"
-),
-# Ticket 22 - Comment Detail API
-path(
-    "comments/<int:pk>/",
-    CommentDetailAPIView.as_view(),
-    name="comment-detail"
-),
+    # Ticket 20 - Create Comment API
+    path(
+        "comments/",
+        CommentCreateAPIView.as_view(),
+        name="comment-create"
+    ),
 
-# Ticket 25 - List Timeline Events API
-path(
-    "timeline/",
-    TimelineEventListAPIView.as_view(),
-    name="timeline-list"
-),
+    # Ticket 21 - List Comments API
+    path(
+        "comments/list/",
+        CommentListAPIView.as_view(),
+        name="comment-list"
+    ),
 
-# Ticket 26 - Notifications API
-path(
-    "notifications/",
-    NotificationListAPIView.as_view(),
-    name="notification-list"
-),
+    # Ticket 22 - Comment Detail API
+    path(
+        "comments/<int:pk>/",
+        CommentDetailAPIView.as_view(),
+        name="comment-detail"
+    ),
 
-# Ticket 27 - Mark Notification as Read API
-path(
-    "notifications/<int:pk>/mark_read/",
-    NotificationMarkReadAPIView.as_view(),
-    name="notification-mark-read"
-),
+    # Ticket 25 - List Timeline Events API
+    path(
+        "timeline/",
+        TimelineEventListAPIView.as_view(),
+        name="timeline-list"
+    ),
+
+    # Ticket 26 - Notifications API
+    path(
+        "notifications/",
+        NotificationListAPIView.as_view(),
+        name="notification-list"
+    ),
+
+    # Ticket 27 - Mark Notification as Read API
+    path(
+        "notifications/<int:pk>/mark_read/",
+        NotificationMarkReadAPIView.as_view(),
+        name="notification-mark-read"
+    ),
 ]
-
-

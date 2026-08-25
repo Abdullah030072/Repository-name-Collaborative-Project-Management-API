@@ -1,5 +1,5 @@
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -13,6 +13,7 @@ from .models import (
     TimelineEvent,
     Notification,
 )
+
 from .serializers import (
     UserSerializer,
     ProfileSerializer,
@@ -23,17 +24,27 @@ from .serializers import (
     TimelineEventSerializer,
     NotificationSerializer,
 )
-from .permissions import IsManager
+
+from .permissions import (
+    IsManager,
+    IsCommentAuthorOrReadOnly,
+)
 
 
+# ============================================================
 # Ticket 1 - User Registration API
+# ============================================================
+
 class UserRegistrationAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = []
 
 
+# ============================================================
 # Ticket 3 - User Logout API
+# ============================================================
+
 class LogoutAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -43,7 +54,7 @@ class LogoutAPIView(generics.GenericAPIView):
         if not refresh_token:
             return Response(
                 {"detail": "Refresh token is required."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
@@ -52,39 +63,59 @@ class LogoutAPIView(generics.GenericAPIView):
 
             return Response(
                 {"detail": "Successfully logged out."},
-                status=status.HTTP_205_RESET_CONTENT
+                status=status.HTTP_205_RESET_CONTENT,
             )
-
         except Exception:
             return Response(
                 {"detail": "Invalid or expired refresh token."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
 
+# ============================================================
 # User List API
+# ============================================================
+
 class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsManager]
 
 
+# ============================================================
 # Profile List + Create API
+# ============================================================
+
 class ProfileListAPIView(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [AllowAny]
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [IsManager()]
+
+        return [IsAuthenticated()]
 
 
+# ============================================================
 # Profile Detail + Update API
+# ============================================================
+
 class ProfileDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [AllowAny]
+
+    def get_permissions(self):
+        if self.request.method in ["PUT", "PATCH"]:
+            return [IsManager()]
+
+        return [IsAuthenticated()]
 
 
-# Ticket 4 - Create Project API
-# Ticket 5 - List Projects API
+# ============================================================
+# Ticket 4 + 5 - Create/List Projects API
+# ============================================================
+
 class ProjectListCreateAPIView(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -99,25 +130,25 @@ class ProjectListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(created_by=self.request.user)
 
 
-# Ticket 6 - Project Detail API
-# Ticket 7 - Update Project API
-# Ticket 8 - Delete Project API
+# ============================================================
+# Ticket 6 + 7 + 8 - Project Detail/Update/Delete API
+# ============================================================
+
 class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
     def get_permissions(self):
-        if self.request.method in ["PUT", "PATCH"]:
+        if self.request.method in ["PUT", "PATCH", "DELETE"]:
             return [IsManager()]
-        if self.request.method == "DELETE":
-                    return [IsManager()]
-    
 
         return [IsAuthenticated()]
 
 
-# Ticket 9 - Create Task API
-# Ticket 10 - List Tasks API
+# ============================================================
+# Ticket 9 + 10 - Create/List Tasks API
+# ============================================================
+
 class TaskListCreateAPIView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -130,27 +161,27 @@ class TaskListCreateAPIView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save()
-        
-# Ticket 11 - Task Detail API
-# Ticket 12 - Update Task API
-# Ticket 13 - Delete Task API
+
+
+# ============================================================
+# Ticket 11 + 12 + 13 - Task Detail/Update/Delete API
+# ============================================================
+
 class TaskDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
     def get_permissions(self):
-        if self.request.method == "PUT":
-            return [IsManager()]
-
-        if self.request.method == "DELETE":
-            return [IsManager()]
-        
-        if self.request.method == "PATCH":
+        if self.request.method in ["PUT", "PATCH", "DELETE"]:
             return [IsManager()]
 
         return [IsAuthenticated()]
-    
+
+
+# ============================================================
 # Ticket 14 - Assign Task API
+# ============================================================
+
 class TaskAssignAPIView(generics.GenericAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -158,13 +189,12 @@ class TaskAssignAPIView(generics.GenericAPIView):
 
     def post(self, request, pk):
         task = self.get_object()
-
         assignee_id = request.data.get("assignee")
 
         if not assignee_id:
             return Response(
                 {"detail": "Assignee is required."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
@@ -172,13 +202,13 @@ class TaskAssignAPIView(generics.GenericAPIView):
         except User.DoesNotExist:
             return Response(
                 {"detail": "User not found."},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if not task.project.team_members.filter(id=user.id).exists():
             return Response(
                 {"detail": "User is not a member of this project."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         task.assignee = user
@@ -186,35 +216,52 @@ class TaskAssignAPIView(generics.GenericAPIView):
 
         return Response(
             TaskSerializer(task).data,
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
 
 
+# ============================================================
 # Ticket 15 - Upload Document API
+# ============================================================
+
 class DocumentUploadAPIView(generics.CreateAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
 
     def perform_create(self, serializer):
-        serializer.save()      
-        
-        
+        serializer.save()
+
+
+# ============================================================
 # Ticket 16 - List Documents API
+# ============================================================
+
 class DocumentListAPIView(generics.ListAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = [IsAuthenticated]
 
-# Ticket 17 - Document Detail API
-# Ticket 18 - Update Document API
-# Ticket 19 - Delete Document API
+
+# ============================================================
+# Ticket 17 + 18 + 19 - Document Detail/Update/Delete API
+# ============================================================
+
 class DocumentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-    permission_classes = [IsAuthenticated]
-    
+
+    def get_permissions(self):
+        if self.request.method in ["PUT", "PATCH", "DELETE"]:
+            return [IsManager()]
+
+        return [IsAuthenticated()]
+
+
+# ============================================================
 # Ticket 20 - Create Comment API
+# ============================================================
+
 class CommentCreateAPIView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -224,30 +271,43 @@ class CommentCreateAPIView(generics.CreateAPIView):
         serializer.save(author=self.request.user)
 
 
+# ============================================================
 # Ticket 21 - List Comments API
+# ============================================================
+
 class CommentListAPIView(generics.ListAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
-    
-# Ticket 22 - Comment Detail API
-# Ticket 23 - Update Comment API
-# Ticket 24 - Delete Comment API
+
+
+# ============================================================
+# Ticket 22 + 23 + 24 - Comment Detail/Update/Delete API
+# ============================================================
+
 class CommentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated,
+        IsCommentAuthorOrReadOnly,
+    ]
 
-    def get_queryset(self):
-        return Comment.objects.filter(author=self.request.user)
-    
+
+# ============================================================
 # Ticket 25 - List Timeline Events API
+# ============================================================
+
 class TimelineEventListAPIView(generics.ListAPIView):
     queryset = TimelineEvent.objects.all().order_by("-created_at")
     serializer_class = TimelineEventSerializer
     permission_classes = [IsAuthenticated]
-    
+
+
+# ============================================================
 # Ticket 26 - Notifications API
+# ============================================================
+
 class NotificationListAPIView(generics.ListAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
@@ -256,8 +316,12 @@ class NotificationListAPIView(generics.ListAPIView):
         return Notification.objects.filter(
             user=self.request.user
         ).order_by("-created_at")
-    
+
+
+# ============================================================
 # Ticket 27 - Mark Notification as Read API
+# ============================================================
+
 class NotificationMarkReadAPIView(generics.UpdateAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
@@ -269,11 +333,10 @@ class NotificationMarkReadAPIView(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         notification = self.get_object()
-
         notification.is_read = True
         notification.save(update_fields=["is_read"])
 
         return Response(
             NotificationSerializer(notification).data,
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
